@@ -28,9 +28,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-
   static const List<String> _menuTitles = [
     'Home',
     'Business',
@@ -39,19 +36,10 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   static const List<Widget> _widgetOptions = <Widget>[
-    GridExample(), // GridView para la opción Home
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: Settings',
-      style: optionStyle,
-    ),
+    Center(child: Text('Index 0: Home', style: TextStyle(fontSize: 30))),
+    BusinessPage(), // Custom theme para Business
+    Center(child: Text('Index 2: School', style: TextStyle(fontSize: 30))),
+    Center(child: Text('Index 3: Settings', style: TextStyle(fontSize: 30))),
   ];
 
   void _onItemTapped(int index, BuildContext context) {
@@ -83,9 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       ),
-      body: Center(
-        child: _widgetOptions[_selectedIndex],
-      ),
+      body: _widgetOptions[_selectedIndex],
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -103,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 selected: _selectedIndex == index,
                 onTap: () {
                   _onItemTapped(index, context);
-                  Navigator.pop(context); // Cierra el Drawer
+                  Navigator.pop(context);
                 },
               ),
             ),
@@ -114,32 +100,39 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class GridExample extends StatelessWidget {
-  const GridExample({super.key});
+class BusinessPage extends StatelessWidget {
+  const BusinessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Número de columnas
-        crossAxisSpacing: 10, // Espacio entre columnas
-        mainAxisSpacing: 10, // Espacio entre filas
+    return Theme(
+      data: ThemeData(
+        primaryColor: Colors.orange,
+        scaffoldBackgroundColor: Colors.orange.shade50,
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: Colors.orange, fontSize: 18),
+          titleLarge: TextStyle(color: Colors.deepOrange, fontSize: 24),
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.orange,
+          foregroundColor: Colors.white,
+        ),
       ),
-      padding: const EdgeInsets.all(10),
-      itemCount: 10, // Número de elementos
-      itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.blue[100 * (index % 9 + 1)],
-            borderRadius: BorderRadius.circular(10),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Business Page'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text('Bienvenido a la pestaña Business'),
+              SizedBox(height: 10),
+              Text('Este es un tema personalizado.')
+            ],
           ),
-          alignment: Alignment.center,
-          child: Text(
-            'Item ${index + 1}',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
